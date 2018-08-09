@@ -1,11 +1,28 @@
 package com.sarpuner.journal
 
+import android.provider.SyncStateContract
 import org.jsoup.Jsoup
 import org.jsoup.select.Selector.select
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class JournalFetchr {
+
+import org.junit.jupiter.api.Assertions.*
+
+internal class JournalFetchrTest {
+
+    @BeforeEach
+    fun setUp() {
+    }
+
+    @AfterEach
+    fun tearDown() {
+    }
+
+    @Test
     fun parseHTML() {
-        Jsoup.connect(R.string.rfi_website.toString()).get().run() {
+        Jsoup.connect().get().run() {
             select("div.rc").forEachIndexed { index, element ->
                 val titleAnchor = element.select("h3 a")
                 val title = titleAnchor.text()
