@@ -1,4 +1,5 @@
 package com.sarpuner.journal
 
-class Episode {
+class Episode(val transcriptAvailable: Boolean) {
+
 }
