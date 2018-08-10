@@ -1,5 +1,6 @@
 package com.sarpuner.journal
 
-class Episode(val transcriptAvailable: Boolean) {
+
+class Episode(val url: String, val title: String) {
 
 }
