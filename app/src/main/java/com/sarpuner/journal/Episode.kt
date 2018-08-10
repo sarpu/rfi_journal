@@ -4,8 +4,9 @@ package com.sarpuner.journal
 
 const val SUFFIX: String = "20h00 GMT"
 
-class Episode(val url: String, val title: String) {
-
+class Episode(url: String, title: String) {
+    val title : String = title.removeSuffix(SUFFIX)
+    val url : String = "$RFI_BASE$url"
 
     override fun toString() = "url:$url\ttitle:${title.removeSuffix(SUFFIX)}"
 }
