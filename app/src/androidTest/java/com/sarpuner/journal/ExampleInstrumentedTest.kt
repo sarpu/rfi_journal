@@ -21,4 +21,6 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.sarpuner.journal", appContext.packageName)
     }
+
+    @Test fun parseHTML() = parseMainPage()
 }
