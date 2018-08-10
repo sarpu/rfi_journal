@@ -10,6 +10,7 @@ class JournalFetchr {
         Jsoup.connect (RFI_WEBSITE).get().run {
             select("div.view-content h2 > a").forEach() {
                 episode = Episode(it.attr("href"), it.text())
+
             }
         }
     }
