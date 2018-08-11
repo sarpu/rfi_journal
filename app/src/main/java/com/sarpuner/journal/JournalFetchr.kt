@@ -4,7 +4,13 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import org.jaudiotagger.audio.AudioFile
+import org.jaudiotagger.audio.AudioFileIO
 import org.jsoup.Jsoup
+import java.io.*
+import java.net.URL
+import java.net.URLConnection
+import java.security.AccessController.getContext
 
 
 /* The methods in this file will be called in an asynctask. Service may be an overkill, because we
@@ -42,13 +48,29 @@ fun downloadData(episode: Episode) {
 
 // TODO: Use download link to download and save the mp3 data to a CompleteEpisode instance
 
-fun downloadAudio() {
+// TODO: Move to a new class where you can access files
+
+fun downloadAudio(url: String, f: File) {
+    val conn: URLConnection = URL(url).openConnection()
+    val iStream: InputStream = conn.getInputStream()
+    val oStream: OutputStream = FileOutputStream(f)
+    var buffer: ByteArray = ByteArray(1024)
+    var len = iStream.read(buffer)
+
+    while (len > 0) {
+        println(len)
+        oStream.write(buffer, 0, len)
+        len = iStream.read(buffer)
+    }
+    oStream.close()
+    //val f: AudioFile = AudioFileIO.read(f)
 
 }
 
 // TODO: Download and transform the transcript as necessary.
 
 
-fun downloadText() {
+fun downloadText(url: String) {
+
 
 }
