@@ -1,17 +1,20 @@
 package com.sarpuner.journal
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import org.jaudiotagger.audio.AudioFile
-import org.jaudiotagger.audio.AudioFileIO
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import org.jsoup.nodes.Node
+import org.jsoup.nodes.TextNode
 import java.io.*
 import java.net.URL
 import java.net.URLConnection
-import java.security.AccessController.getContext
 
+
+private const val JOURNAL_FETCHR_TAG = "JournalFetchr"
 
 /* The methods in this file will be called in an asynctask. Service may be an overkill, because we
 do not wish it to run continuously. */
@@ -46,9 +49,14 @@ fun downloadData(episode: Episode) {
     //println(gson.toJson(tempObject))
 }
 
+
+// TODO: Refactor downloadAudio and downloadText methods, there is a lot of redundancy.
+
 // TODO: Use download link to download and save the mp3 data to a CompleteEpisode instance
 
 // TODO: Move to a new class where you can access files
+
+// TODO: save the audio file as mp3!
 
 fun downloadAudio(url: String, f: File) {
     val conn: URLConnection = URL(url).openConnection()
@@ -58,7 +66,6 @@ fun downloadAudio(url: String, f: File) {
     var len = iStream.read(buffer)
 
     while (len > 0) {
-        println(len)
         oStream.write(buffer, 0, len)
         len = iStream.read(buffer)
     }
@@ -70,7 +77,32 @@ fun downloadAudio(url: String, f: File) {
 // TODO: Download and transform the transcript as necessary.
 
 
-fun downloadText(url: String) {
+// Download the text of each episode. The text() method gets all the combined text of the element
+// and its children
+fun downloadText(url: String, f: File) {
+
+    // The line below makes sure the file is empty
+
+    f.printWriter().use {
+        print("")
+    }
+    val paragraphs = Jsoup.connect(url).get().run() {
+        select("div.field-item > p")
+    }
+    for (p: Element in paragraphs) {
+        f.appendText("${p.text()}\n")
+    }
+}
 
 
+// POSSIBLE DELETION! This method will probably not be used.
+private fun textNodesWithNewlines(e: Node): String {
+    var temp: String = ""
+    for (n: Node in e.childNodes()) {
+        if (n is TextNode && !n.isBlank) {
+            temp += "\n${n.text()}"
+        }
+        else temp += textNodesWithNewlines(n)
+    }
+    return temp
 }
