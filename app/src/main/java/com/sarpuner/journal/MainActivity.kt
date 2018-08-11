@@ -10,7 +10,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
        parseMainPage()
-
     }
+
+    // TODO: Add a scrolling list of RFI episodes.
+
+    // TODO: Implement buttons to download specific episodes.
 
 }
