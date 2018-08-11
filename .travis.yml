@@ -1,0 +1,14 @@
+language: android
+
+android:
+  components:
+    - platform-tools
+    - android-28
+
+script:
+  - ./gradlew build
+  
+branches:
+  only:
+    - master
+  
