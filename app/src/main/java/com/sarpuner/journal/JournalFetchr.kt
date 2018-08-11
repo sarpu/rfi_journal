@@ -45,8 +45,8 @@ fun downloadData(episode: Episode) {
 
     // TODO: This might be the ugliest piece of code ever written in the history of everdom. Refactor!
 
+    // The line below extracts the download url from the JSON object.
     println(gson.toJson(tempObject.getAsJsonObject("medias").getAsJsonObject("media").getAsJsonObject("media_sources").getAsJsonArray("media_source").get(0).asJsonObject.get("source")))
-    //println(gson.toJson(tempObject))
 }
 
 
@@ -62,7 +62,7 @@ fun downloadAudio(url: String, f: File) {
     val conn: URLConnection = URL(url).openConnection()
     val iStream: InputStream = conn.getInputStream()
     val oStream: OutputStream = FileOutputStream(f)
-    var buffer: ByteArray = ByteArray(1024)
+    var buffer = ByteArray(1024)
     var len = iStream.read(buffer)
 
     while (len > 0) {
@@ -97,7 +97,7 @@ fun downloadText(url: String, f: File) {
 
 // POSSIBLE DELETION! This method will probably not be used.
 private fun textNodesWithNewlines(e: Node): String {
-    var temp: String = ""
+    var temp = ""
     for (n: Node in e.childNodes()) {
         if (n is TextNode && !n.isBlank) {
             temp += "\n${n.text()}"
