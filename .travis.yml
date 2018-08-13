@@ -15,7 +15,8 @@ android:
 
 before_install:
   - chmod +x gradlew
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;24.0.3"
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3"
+
 licenses:
   - android-sdk-preview-license-.+
   - android-sdk-license-.+
