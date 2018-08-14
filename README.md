@@ -1,4 +1,4 @@
-![Travis-ci](https://api.travis-ci.org/sarpu/rfi_journal.svg)
+[![Travis-ci](https://api.travis-ci.org/sarpu/rfi_journal.svg)](https://travis-ci.org/sarpu/rfi_journal)
 
 
 # rfi_journal
