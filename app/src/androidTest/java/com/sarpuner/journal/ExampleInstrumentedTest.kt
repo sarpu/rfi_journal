@@ -44,6 +44,8 @@ class ExampleInstrumentedTest {
         downloadText(url, f)
     }
 
+    // TODO: Make this test use the created files as opposed to hardcoding them (with @beforetest?)
+
     @Test
     fun addLyricsToAudio() {
         val audio: File = File(appContext.filesDir,"09-08-2018.mp3")
