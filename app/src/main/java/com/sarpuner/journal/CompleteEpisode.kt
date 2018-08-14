@@ -1,5 +1,3 @@
 package com.sarpuner.journal
 
-class CompleteEpisode {
-
-}
+class CompleteEpisode

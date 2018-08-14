@@ -1,23 +1,37 @@
 package com.sarpuner.journal
 
 import android.util.Log
+import com.google.common.base.Charsets
+import com.google.common.base.Utf8
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import org.jaudiotagger.audio.AudioFile
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.audio.mp3.MP3File
+import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
+import org.jaudiotagger.tag.id3.AbstractID3v2Frame
+import org.jaudiotagger.tag.id3.ID3v22Frames
+import org.jaudiotagger.tag.id3.ID3v22Tag
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import java.io.*
+import java.lang.reflect.Field
 import java.net.URL
 import java.net.URLConnection
+import java.nio.file.Files
+import java.nio.file.Paths
 
 
 private const val JOURNAL_FETCHR_TAG = "JournalFetchr"
 
 /* The methods in this file will be called in an asynctask. Service may be an overkill, because we
-do not wish it to run continuously. */
+do not wish it to run continuously. Will probably add a button and scrolling list for episodes, or,
+may incorporate something along the lines of webview.*/
 
 // TODO: Move the downloadData function call out of parseMainPage
 
@@ -25,7 +39,7 @@ do not wish it to run continuously. */
 fun parseMainPage() {
     var episode: Episode
     Jsoup.connect (RFI_WEBSITE).get().run {
-        select(EPISODE_LINK_QUERY).forEach() {
+        select(EPISODE_LINK_QUERY).forEach {
             episode = Episode(it.attr("href"), it.text())
             //println(episode.toString())
             downloadData(episode)
@@ -50,8 +64,6 @@ fun downloadData(episode: Episode) {
 }
 
 
-// TODO: Refactor downloadAudio and downloadText methods, there is a lot of redundancy.
-
 // TODO: Use download link to download and save the mp3 data to a CompleteEpisode instance
 
 // TODO: Move to a new class where you can access files
@@ -70,23 +82,20 @@ fun downloadAudio(url: String, f: File) {
         len = iStream.read(buffer)
     }
     oStream.close()
-    //val f: AudioFile = AudioFileIO.read(f)
-
 }
 
 // TODO: Download and transform the transcript as necessary.
 
 
 // Download the text of each episode. The text() method gets all the combined text of the element
-// and its children
+// and its children, in order.
 fun downloadText(url: String, f: File) {
 
     // The line below makes sure the file is empty
-
     f.printWriter().use {
         print("")
     }
-    val paragraphs = Jsoup.connect(url).get().run() {
+    val paragraphs = Jsoup.connect(url).get().run {
         select("div.field-item > p")
     }
     for (p: Element in paragraphs) {
@@ -94,8 +103,18 @@ fun downloadText(url: String, f: File) {
     }
 }
 
+// The method below successfully adds unsynced lyrics! Works on samsung media player!!
+
+fun addTextToAudio(text: File, audio: File) {
+    val audioFile: AudioFile = AudioFileIO.read(audio)
+    val lyrics: String = com.google.common.io.Files.asCharSource(text, Charsets.UTF_8).read()
+    val tag: Tag = audioFile.tag
+    tag.setField(FieldKey.LYRICS, lyrics)
+    audioFile.commit()
+}
 
 // POSSIBLE DELETION! This method will probably not be used.
+
 private fun textNodesWithNewlines(e: Node): String {
     var temp = ""
     for (n: Node in e.childNodes()) {

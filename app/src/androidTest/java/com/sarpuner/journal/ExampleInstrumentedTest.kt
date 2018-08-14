@@ -1,8 +1,6 @@
 package com.sarpuner.journal
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
-import android.support.test.InstrumentationRegistry.getContext
 import android.support.test.runner.AndroidJUnit4
 import android.util.Log
 
@@ -12,13 +10,10 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import java.io.File
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 
 private const val INSTRUMENT_TAG = "InstrumentTest"
+
+// TODO: There is a problem here with the class run!
 
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
@@ -37,9 +32,7 @@ class ExampleInstrumentedTest {
         val name = "09-08-2018.mp3"
         val f = File(appContext.filesDir, name)
         Log.d(INSTRUMENT_TAG, f.absolutePath)
-
         downloadAudio(url, f)
-
     }
 
     @Test
@@ -49,6 +42,12 @@ class ExampleInstrumentedTest {
         val f = File(appContext.filesDir, name)
 
         downloadText(url, f)
+    }
 
+    @Test
+    fun addLyricsToAudio() {
+        val audio: File = File(appContext.filesDir,"09-08-2018.mp3")
+        val text: File = File(appContext.filesDir, "09-08-2018.txt")
+        addTextToAudio(text, audio)
     }
 }
