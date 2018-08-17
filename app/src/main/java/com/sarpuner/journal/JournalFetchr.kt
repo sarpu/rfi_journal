@@ -1,30 +1,21 @@
 package com.sarpuner.journal
 
-import android.util.Log
 import com.google.common.base.Charsets
-import com.google.common.base.Utf8
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.audio.mp3.MP3File
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
-import org.jaudiotagger.tag.id3.AbstractID3v2Frame
-import org.jaudiotagger.tag.id3.ID3v22Frames
-import org.jaudiotagger.tag.id3.ID3v22Tag
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import java.io.*
-import java.lang.reflect.Field
 import java.net.URL
 import java.net.URLConnection
-import java.nio.file.Files
-import java.nio.file.Paths
 
 
 private const val JOURNAL_FETCHR_TAG = "JournalFetchr"
@@ -36,20 +27,19 @@ may incorporate something along the lines of webview.*/
 // TODO: Move the downloadData function call out of parseMainPage
 
 // Parse the main page of Journal en français facile to obtain a list of episodes.
-fun parseMainPage() {
-    var episode: Episode
+fun parseMainPage() : MutableList<Episode> {
+    val epiList: MutableList<Episode> = mutableListOf()
     Jsoup.connect (RFI_WEBSITE).get().run {
         select(EPISODE_LINK_QUERY).forEach {
-            episode = Episode(it.attr("href"), it.text())
-            //println(episode.toString())
-            downloadData(episode)
+            epiList.add(Episode(it.attr("href"), it.text()))
         }
+        return epiList
     }
 }
 
 // TODO: Find a better way to parse JSON, and extract the download link.
 
-fun downloadData(episode: Episode) {
+fun downloadData(episode: Episode): String {
     println(episode.url)
     val jsonString: String = Jsoup.connect(episode.url).get().run{
         select("div[data-brainsonic]").attr("data-brainsonic")
@@ -59,8 +49,11 @@ fun downloadData(episode: Episode) {
 
     // TODO: This might be the ugliest piece of code ever written in the history of everdom. Refactor!
 
-    // The line below extracts the download url from the JSON object.
-    println(gson.toJson(tempObject.getAsJsonObject("medias").getAsJsonObject("media").getAsJsonObject("media_sources").getAsJsonArray("media_source").get(0).asJsonObject.get("source")))
+    // The line below extracts the download url from the JSON object, and returns it.
+
+    return gson.toJson(tempObject.getAsJsonObject("medias")
+            .getAsJsonObject("media").getAsJsonObject("media_sources")
+            .getAsJsonArray("media_source").get(0).asJsonObject.get("source"))
 }
 
 

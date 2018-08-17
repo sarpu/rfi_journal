@@ -1,5 +1,6 @@
 package com.sarpuner.journal
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     // TODO: Implement buttons to download specific episodes.
 
     fun download(view: View) {
-
+        val intent = Intent(this, DownloadIntentService::class.java)
+        startService(intent)
     }
-
 }
