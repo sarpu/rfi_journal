@@ -11,10 +11,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        parseMainPage()
-        val contxt = this.filesDir
-
     }
 
     // TODO: Add a scrolling list of RFI episodes.
