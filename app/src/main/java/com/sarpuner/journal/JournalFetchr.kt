@@ -1,5 +1,6 @@
 package com.sarpuner.journal
 
+import android.util.Log
 import com.google.common.base.Charsets
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -32,6 +33,7 @@ fun parseMainPage() : MutableList<Episode> {
     Jsoup.connect (RFI_WEBSITE).get().run {
         select(EPISODE_LINK_QUERY).forEach {
             epiList.add(Episode(it.attr("href"), it.text()))
+            //Log.d(JOURNAL_FETCHR_TAG, it.text())
         }
         return epiList
     }
@@ -39,9 +41,10 @@ fun parseMainPage() : MutableList<Episode> {
 
 // TODO: Find a better way to parse JSON, and extract the download link.
 
-fun downloadData(episode: Episode): String {
-    println(episode.url)
-    val jsonString: String = Jsoup.connect(episode.url).get().run{
+// This method returns the download links of each episode.
+
+fun downloadData(episode_link: String): String {
+    val jsonString: String = Jsoup.connect(episode_link).get().run{
         select("div[data-brainsonic]").attr("data-brainsonic")
     }
     val gson: Gson = GsonBuilder().setPrettyPrinting().create()
@@ -50,10 +53,14 @@ fun downloadData(episode: Episode): String {
     // TODO: This might be the ugliest piece of code ever written in the history of everdom. Refactor!
 
     // The line below extracts the download url from the JSON object, and returns it.
-
-    return gson.toJson(tempObject.getAsJsonObject("medias")
+    val ret = gson.toJson(tempObject.getAsJsonObject("medias")
             .getAsJsonObject("media").getAsJsonObject("media_sources")
             .getAsJsonArray("media_source").get(0).asJsonObject.get("source"))
+
+
+    Log.d(JOURNAL_FETCHR_TAG, "Value of ret is: $ret")
+
+    return ret
 }
 
 
@@ -63,9 +70,12 @@ fun downloadData(episode: Episode): String {
 
 // TODO: save the audio file as mp3!
 
+//val conn: InputStream = URLConnection(url).getInputStream()
+
+
 fun downloadAudio(url: String, f: File) {
-    val conn: URLConnection = URL(url).openConnection()
-    val iStream: InputStream = conn.getInputStream()
+    Log.d(JOURNAL_FETCHR_TAG, "URL is $url")
+    val iStream: InputStream = URL(url).openStream()
     val oStream: OutputStream = FileOutputStream(f)
     var buffer = ByteArray(1024)
     var len = iStream.read(buffer)
