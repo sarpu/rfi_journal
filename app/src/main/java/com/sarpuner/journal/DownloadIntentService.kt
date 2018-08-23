@@ -18,7 +18,6 @@ class DownloadIntentService : IntentService(DownloadIntentService::class.simpleN
         epiList.forEach {
             val fName = "${it.title.replace(" ", "-")}"
             val downloadUrl = downloadData(it.url)
-            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "URL at erros is: $downloadUrl")
             val fAudio = File(applicationContext.filesDir, "$fName.mp3")
             val fText = File(applicationContext.filesDir, "$fName.txt")
             downloadAudio(downloadUrl, fAudio)

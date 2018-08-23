@@ -53,11 +53,9 @@ fun downloadData(episode_link: String): String {
     // TODO: This might be the ugliest piece of code ever written in the history of everdom. Refactor!
 
     // The line below extracts the download url from the JSON object, and returns it.
-    var ret = gson.toJson(tempObject.getAsJsonObject("medias")
+    var ret = tempObject.getAsJsonObject("medias")
             .getAsJsonObject("media").getAsJsonObject("media_sources")
-            .getAsJsonArray("media_source").get(0).asJsonObject.get("source"))
-
-    ret = ret.substring(1, ret.length-1)
+            .getAsJsonArray("media_source").get(0).asJsonObject.get("source").asString
 
     Log.d(JOURNAL_FETCHR_TAG, "Value of ret is: $ret")
 
@@ -75,7 +73,6 @@ fun downloadData(episode_link: String): String {
 
 
 fun downloadAudio(url: String, f: File) {
-    Log.d(JOURNAL_FETCHR_TAG, "URL is $url")
     val iStream: InputStream = URL(url).openStream()
     val oStream: OutputStream = FileOutputStream(f)
     var buffer = ByteArray(1024)
