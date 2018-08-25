@@ -16,10 +16,13 @@ class DownloadIntentService : IntentService(DownloadIntentService::class.simpleN
     override fun onHandleIntent(downloadIntent: Intent) {
         val epiList: List<Episode> = parseMainPage()
         epiList.forEach {
-            val fName = "${it.title.replace(" ", "-")}"
+            val fName = it.title.replace("/", "-").replace(" ", "")
             val downloadUrl = downloadData(it.url)
-            val fAudio = File(applicationContext.filesDir, "$fName.mp3")
-            val fText = File(applicationContext.filesDir, "$fName.txt")
+            val dir = this.filesDir
+            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "filesDir: $dir")
+            val fAudio = File(this.filesDir, "$fName.mp3")
+            val fText = File(this.filesDir, "$fName.txt")
+            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "The downloaded episodes are: ${it.title}")
             downloadAudio(downloadUrl, fAudio)
             downloadText(downloadUrl, fText)
             addTextToAudio(fText, fAudio)

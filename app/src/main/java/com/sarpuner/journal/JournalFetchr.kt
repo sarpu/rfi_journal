@@ -56,9 +56,6 @@ fun downloadData(episode_link: String): String {
     var ret = tempObject.getAsJsonObject("medias")
             .getAsJsonObject("media").getAsJsonObject("media_sources")
             .getAsJsonArray("media_source").get(0).asJsonObject.get("source").asString
-
-    Log.d(JOURNAL_FETCHR_TAG, "Value of ret is: $ret")
-
     return ret
 }
 
@@ -74,7 +71,7 @@ fun downloadData(episode_link: String): String {
 
 fun downloadAudio(url: String, f: File) {
     val iStream: InputStream = URL(url).openStream()
-    val oStream: OutputStream = FileOutputStream(f)
+    val oStream: OutputStream = f.outputStream()
     var buffer = ByteArray(1024)
     var len = iStream.read(buffer)
 
