@@ -12,19 +12,22 @@ class DownloadIntentService : IntentService(DownloadIntentService::class.simpleN
 
     // TODO: Refactor this method to reduce the amount of dependencies.
 
+    // TODO: Rename some of the variables to be more descriptive.
+
     // This method downloads all the episodes on the main page, integrates text, and saves them.
     override fun onHandleIntent(downloadIntent: Intent) {
         val epiList: List<Episode> = parseMainPage()
         epiList.forEach {
             val fName = it.title.replace("/", "-").replace(" ", "")
-            val downloadUrl = downloadData(it.url)
+            val downloadUrl = downloadAudioURL(it.url)
+            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "downloadUrl: $downloadUrl")
             val dir = this.filesDir
-            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "filesDir: $dir")
+            Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "fName: $fName")
             val fAudio = File(this.filesDir, "$fName.mp3")
             val fText = File(this.filesDir, "$fName.txt")
             Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "The downloaded episodes are: ${it.title}")
             downloadAudio(downloadUrl, fAudio)
-            downloadText(downloadUrl, fText)
+            downloadText(it.url, fText)
             addTextToAudio(fText, fAudio)
         }
     }

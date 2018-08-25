@@ -25,7 +25,7 @@ private const val JOURNAL_FETCHR_TAG = "JournalFetchr"
 do not wish it to run continuously. Will probably add a button and scrolling list for episodes, or,
 may incorporate something along the lines of webview.*/
 
-// TODO: Move the downloadData function call out of parseMainPage
+// TODO: Move the downloadAudioURL function call out of parseMainPage
 
 // Parse the main page of Journal en français facile to obtain a list of episodes.
 fun parseMainPage() : MutableList<Episode> {
@@ -43,7 +43,7 @@ fun parseMainPage() : MutableList<Episode> {
 
 // This method returns the download links of each episode.
 
-fun downloadData(episode_link: String): String {
+fun downloadAudioURL(episode_link: String): String {
     val jsonString: String = Jsoup.connect(episode_link).get().run{
         select("div[data-brainsonic]").attr("data-brainsonic")
     }
@@ -58,7 +58,6 @@ fun downloadData(episode_link: String): String {
             .getAsJsonArray("media_source").get(0).asJsonObject.get("source").asString
     return ret
 }
-
 
 // TODO: Use download link to download and save the mp3 data to a CompleteEpisode instance
 
