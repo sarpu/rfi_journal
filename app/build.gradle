@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'jacoco-android'
+
+
+
 android {
     lintOptions {
         abortOnError false
@@ -52,3 +56,5 @@ dependencies {
     implementation 'net.jthink:jaudiotagger:2.2.3'
     api 'com.google.guava:guava:26.0-android'
 }
+
+
