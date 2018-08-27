@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
 
     // TODO: Implement buttons to download specific episodes.
 
+    // TODO: Add progress indicator
+
     fun download(view: View) {
         val intent = Intent(this, DownloadIntentService::class.java)
         startService(intent)

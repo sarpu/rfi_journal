@@ -48,7 +48,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun addLyricsToAudio() {
-        val audio: File = File(appContext.filesDir,"09-08-2018.mp3")
+        val audio: File = File(appContext.filesDir, "09-08-2018.mp3")
         val text: File = File(appContext.filesDir, "09-08-2018.txt")
         addTextToAudio(text, audio)
     }

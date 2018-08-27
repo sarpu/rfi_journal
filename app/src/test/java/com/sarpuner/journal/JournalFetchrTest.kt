@@ -1,8 +1,9 @@
 package com.sarpuner.journal
 
+import org.junit.Test
+import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 internal class JournalFetchrTest {
 
@@ -15,7 +16,11 @@ internal class JournalFetchrTest {
     }
 
     @Test
-    fun parseHTML() = parseMainPage()
+    fun parseMainPageTest() {
+        val epiList: List<Episode> = parseMainPage()
+        assertTrue(epiList is List<Episode>)
+
+    }
 
 
 }

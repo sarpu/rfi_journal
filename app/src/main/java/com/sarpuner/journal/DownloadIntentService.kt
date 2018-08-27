@@ -21,7 +21,6 @@ class DownloadIntentService : IntentService(DownloadIntentService::class.simpleN
             val fName = it.title.replace("/", "-").replace(" ", "")
             val downloadUrl = downloadAudioURL(it.url)
             Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "downloadUrl: $downloadUrl")
-            val dir = this.filesDir
             Log.d(DOWNLOAD_INTENT_SERVICE_TAG, "fName: $fName")
             val fAudio = File(this.filesDir, "$fName.mp3")
             val fText = File(this.filesDir, "$fName.txt")
