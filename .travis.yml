@@ -23,7 +23,7 @@ licenses:
   - google-gdk-license-.+
 
 script:
-  - ./gradlew build jacocoTestReport
+  - ./gradlew build jacocoTestReport assembleAndroidTest
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
